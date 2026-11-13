@@ -1,0 +1,47 @@
+# Secrets — never commit
+.env
+*.key
+*.pem
+*.p12
+nginx/certs/*
+!nginx/certs/.gitkeep
+
+# Java / Maven / Gradle
+target/
+build/
+.gradle/
+*.class
+*.log
+hs_err_pid*
+
+# IDEs
+.idea/
+*.iml
+.vscode/
+.project
+.classpath
+.settings/
+
+# Xcode
+ios-app/**/xcuserdata/
+ios-app/**/DerivedData/
+*.xcuserstate
+*.xcscmblueprint
+
+# Python (seed scripts)
+__pycache__/
+*.pyc
+.venv/
+
+# Database dumps and local data
+*.dmp
+*.dump
+db/seed/output/
+
+# Test output
+tests/k6/results/
+newman/
+
+# OS
+.DS_Store
+Thumbs.db
