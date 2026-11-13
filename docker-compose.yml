@@ -3,6 +3,7 @@ name: miniwallet
 services:
   oracle:
     image: gvenzl/oracle-xe:21-slim
+    platform: linux/amd64
     environment:
       ORACLE_PASSWORD: ${ORACLE_SYS_PASSWORD}
       DB_OWNER_PASSWORD: ${DB_OWNER_PASSWORD}
