@@ -46,3 +46,25 @@
 | ORA-471 | Database Writer process terminated with error |
 | ORA-1092 | Oracle instance terminated; disconnection forced |
 | ORA-12514 / DPY-6001 | Listener has no service with that name; the database is down or still starting |
+
+
+## Recurrence (2026-11-28)
+
+The crash happened again: same ORA-471. Both crashes happened before the transaction seed load, so load was not the trigger; the first one started at exactly 22:00 UTC, when Oracle's nightly maintenance window begins.
+
+Evidence (cgroup memory.stat, idle, 3 GB limit):
+
+| Type | Size | Reclaimable |
+| --- | --- | --- |
+| anon (process memory) | 1.55 GiB | No |
+| shmem (SGA) | 1.13 GiB | No |
+| page cache (file - shmem) | 0.18 GiB | Yes |
+| Non-reclaimable total | 2.68 GiB | |
+
+- `docker stats` alone is misleading: it counts page cache, which the kernel can free.
+- The alert log's "Memory (Avail / Total)" line shows the whole Docker VM, not the container limit.
+
+Root cause: Oracle XE needs about 2.7 GB that cannot be freed (SGA, process memory and amd64 emulation overhead on Apple Silicon). A 2 GB limit could never fit it; any extra memory need, such as the maintenance window jobs, triggered the kernel to kill DBW0.
+
+Permanent fix: raised `mem_limit` from 2g to 4g.
+Possible later improvement: lower `sga_target` to 1 GB.

@@ -19,7 +19,7 @@ services:
       timeout: 10s
       retries: 20
       start_period: 60s
-    mem_limit: 2g
+    mem_limit: 4g
 
   flyway:
     image: flyway/flyway:10
